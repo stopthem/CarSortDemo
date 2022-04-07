@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 public static class EventManager
 {
@@ -20,13 +21,17 @@ public static class EventManager
     {
         var type = typeof(T);
 
-        RegisteredListeners[type].Remove(listener);
+        if (RegisteredListeners.ContainsKey(type)) RegisteredListeners[type].Remove(listener);
     }
 
     public static void RaiseEvent<T>(T evt)
     {
         var type = typeof(T);
-
+        if (RegisteredListeners.Count == 0 || RegisteredListeners[type].Count == 0)
+        {
+            Debug.Log("There are no subscribers to " + type.Name);
+            return;
+        }
         foreach (var listener in RegisteredListeners[type])
             ((IEventListener<T>)listener).HandleEvent(evt);
     }

@@ -25,7 +25,7 @@ public class CinemachineManager : Singleton<CinemachineManager>
     [Header("Shake")]
     [SerializeField] NoiseSettings shakeNoise;
     [SerializeField] private PresetAnimationCurves shakeFinishCurve = PresetAnimationCurves.INCREASE;
-    [SerializeField] private float shakeFinishSpeed = 5f;
+    [SerializeField] private float shakeFinishDuration = 1f;
     private bool _shaking;
     private static CinemachineVirtualCamera cinemachineVirtualCamera;
     private static CinemachineTransposer transposer;
@@ -51,16 +51,13 @@ public class CinemachineManager : Singleton<CinemachineManager>
         float oldAmplitudeGain = multiChannelPerlin.m_AmplitudeGain;
         multiChannelPerlin.m_AmplitudeGain = intensity;
         multiChannelPerlin.m_NoiseProfile = Instance.shakeNoise;
-        DOVirtual.DelayedCall(duration, () =>
-        {
-            LerpManager.LerpOverTime(intensity, 0, Instance.shakeFinishSpeed, x => multiChannelPerlin.m_AmplitudeGain = x, curve: Instance.shakeFinishCurve,
-            normalAction: () =>
-            {
-                LerpManager.LerpOverTime(multiChannelPerlin.m_AmplitudeGain, oldAmplitudeGain, 2f, x => multiChannelPerlin.m_AmplitudeGain = x,
-                 normalAction: () => Instance._shaking = false);
-                multiChannelPerlin.m_NoiseProfile = oldNoise;
-            });
-        });
+        DOTween.Sequence()
+        .AppendInterval(duration)
+        .Append(DOTween.To(x => multiChannelPerlin.m_AmplitudeGain = x, intensity, 0, duration))
+            .AppendCallback(() => multiChannelPerlin.m_NoiseProfile = oldNoise)
+        .Append(DOTween.To(x => multiChannelPerlin.m_AmplitudeGain = x, multiChannelPerlin.m_AmplitudeGain, oldAmplitudeGain, Instance.shakeFinishDuration)
+                .SetEase(LerpManager.PresetToAnimationCurve(Instance.shakeFinishCurve)))
+            .AppendCallback(() => Instance._shaking = false);
     }
 
     public void EmptyFollowTarget(bool emptyLookAt = false)
@@ -69,53 +66,20 @@ public class CinemachineManager : Singleton<CinemachineManager>
         cinemachineVirtualCamera.m_LookAt = emptyLookAt ? null : cinemachineVirtualCamera.m_LookAt;
     }
 
+    public static Tween MoveOnlyPos(Offsets offset, float duration, Ease ease = Ease.InOutQuad)
+    => DOVirtual.Vector3(transposer.m_FollowOffset, Instance.offsetsRotations[(int)offset].offset, duration, x => transposer.m_FollowOffset = x).SetEase(ease)
+    .OnComplete(() => _currentOffset = offset);
 
-    public static void MoveOnlyPos(Offsets offset, float speed = speed, PresetAnimationCurves curve = PresetAnimationCurves.DECREASING, AnimationCurve overrideCurve = null,
-    float timeActionWhen = 0, System.Action timeAction = null, float delayAction = 0, System.Action action = null)
-    {
-        LerpManager.LerpOverTime(transposer.m_FollowOffset, Instance.offsetsRotations[(int)offset].offset, speed, x => transposer.m_FollowOffset = x, curve,
-            overrideCurve, timeActionWhen, timeAction, delayAction, () =>
-              {
-                  action.Invoke();
-                  _currentOffset = offset;
-              });
-    }
+    public static Tween MoveOnlyRot(Offsets offset, float duration, Ease ease = Ease.InOutQuad)
+    => Instance.transform.DORotate(Instance.offsetsRotations[(int)offset].rotation, duration).SetEase(ease)
+    .OnComplete(() => _currentOffset = offset);
 
-    public static void MoveOnlyRot(Offsets offset, float speed = speed, PresetAnimationCurves curve = PresetAnimationCurves.DECREASING, AnimationCurve overrideCurve = null,
-    float timeActionWhen = 0f, System.Action timeAction = null, float delayAction = 0, System.Action action = null)
+    public static Sequence Move(Offsets offset, float duration, Ease ease = Ease.InOutQuad)
     {
-        LerpManager.LerpOverTime(Instance.transform.rotation, Quaternion.Euler(Instance.offsetsRotations[(int)offset].rotation), speed, x => Instance.transform.rotation = x, curve,
-            overrideCurve, timeActionWhen, timeAction, delayAction, () =>
-              {
-                  action.Invoke();
-                  _currentOffset = offset;
-              });
-    }
-
-    public static void Move(Offsets offset, float speed = speed, bool pos = true, bool rot = true, PresetAnimationCurves curve = PresetAnimationCurves.DECREASING,
-     AnimationCurve overrideCurve = null,
-       float timeActionWhen = 0f, System.Action timeAction = null, float delayAction = 0, System.Action action = null)
-    {
-        if (pos)
-        {
-            LerpManager.LerpOverTime(transposer.m_FollowOffset, Instance.offsetsRotations[(int)offset].offset, speed, x => transposer.m_FollowOffset = x, curve,
-                overrideCurve, timeActionWhen, timeAction, delayAction, () =>
-              {
-                  action.Invoke();
-                  _currentOffset = offset;
-              });
-        }
-        if (rot)
-        {
-            System.Action action1 = pos ? null : action;
-            System.Action timeAction1 = pos ? null : timeAction;
-            LerpManager.LerpOverTime(Instance.transform.rotation, Quaternion.Euler(Instance.offsetsRotations[(int)offset].rotation), speed, x => Instance.transform.rotation = x, curve,
-            overrideCurve, timeActionWhen, timeAction1, delayAction, () =>
-              {
-                  action.Invoke();
-                  _currentOffset = offset;
-              });
-        }
+        return DOTween.Sequence()
+         .Append(DOVirtual.Vector3(transposer.m_FollowOffset, Instance.offsetsRotations[(int)offset].offset, duration, x => transposer.m_FollowOffset = x).SetEase(ease))
+         .Join(Instance.transform.DORotate(Instance.offsetsRotations[(int)offset].rotation, duration).SetEase(ease))
+         .AppendCallback(() => _currentOffset = offset);
     }
 
     public static void ChangeUpdateMethod(CinemachineBrain.UpdateMethod updateMethod)

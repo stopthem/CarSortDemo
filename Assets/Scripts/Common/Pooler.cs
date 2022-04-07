@@ -71,7 +71,7 @@ public class Pooler : MonoBehaviour
         poolable.transform.parent = transform;
 
         poolable.transform.localScale = objectToPool.transform.localScale;
-        poolable.transform.rotation = Quaternion.identity;
+        poolable.transform.rotation = objectToPool.transform.rotation;
         poolable.transform.localPosition = Vector3.zero;
 
         poolable.gameObject.SetActive(false);

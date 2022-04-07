@@ -10,6 +10,7 @@ public class GameManager : Singleton<GameManager>
     public static TimeManager timeManager;
 
     [HideInInspector] public static GameStatus gameStatus;
+    public static LevelInfo currentlevelInfo;
 
     public static System.Action OnGameStarted, OnGameSuccess, OnGameFailed, OnGameEnded, OnLevelInitialized;
 
@@ -19,6 +20,7 @@ public class GameManager : Singleton<GameManager>
     {
         QualitySettings.vSyncCount = 0;
         Application.targetFrameRate = 60;
+        currentlevelInfo = FileUtils.GetCurrentLevelInfo();
     }
 
     private void Start()
@@ -108,7 +110,7 @@ public class GameManager : Singleton<GameManager>
         DOVirtual.DelayedCall(main.duration + particle.GetComponentsInChildren<ParticleSystem>().Select(x => x.main).Max(x => x.startLifetime.constantMax), () =>
           {
               particle.Stop();
-              expObj.GetComponent<Poolable>().ClearMe();
+              DOVirtual.DelayedCall(main.duration, () => expObj.GetComponent<Poolable>().ClearMe());
           });
     }
 

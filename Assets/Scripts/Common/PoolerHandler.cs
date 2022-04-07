@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class PoolerHandler : Singleton<PoolerHandler>
+public class PoolerHandler : MonoBehaviour
 {
+    public static PoolerHandler Instance;
+
     private Pooler[] _poolers;
 
     private void Awake()
     {
+        Instance = this;
         _poolers = GetComponentsInChildren<Pooler>();
     }
 
