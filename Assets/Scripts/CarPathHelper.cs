@@ -81,7 +81,7 @@ public class CarPathHelper : MonoBehaviour
         else if (prevGridPos != Vector3.zero && grid)
         {
             Vector3[] pathCorners = GetNavMeshPath(prevGridPos, grid.transform.position);
-            for (int i = 0; i < pathCorners.Length; i++)
+            for (int i = 1; i < pathCorners.Length; i++)
             {
                 _pathCreator.bezierPath.AddSegmentToEnd(pathCorners[i]);
             }

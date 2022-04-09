@@ -93,7 +93,7 @@ GameObject:
   - component: {fileID: 5569737888249281540}
   - component: {fileID: 5967397934559473710}
   m_Layer: 0
-  m_Name: button
+  m_Name: GateButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

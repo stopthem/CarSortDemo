@@ -25,7 +25,7 @@ public class Car : MonoBehaviour
     public void FollowPath(Tuple<VertexPath, CarGrid> tuple)
     {
         if (tuple.Item1 == null || tuple.Item2 == null) return;
-        float moveDuration = carVariables.baseMoveDuration * (500 / (500 - tuple.Item1.length));
+        float moveDuration = carVariables.baseMoveDuration * (carVariables.maxPathLengthToCalculateSpeed / (carVariables.maxPathLengthToCalculateSpeed - tuple.Item1.length));
         DOTween.Sequence()
         .Append(DOTween.To(x =>
         {
