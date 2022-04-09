@@ -8,14 +8,10 @@ public class LevelColorsHandler : MonoBehaviour
 
     [SerializeField] private Material roadMat;
 
-    private void Awake()
-    {
-        Instance = this;
-    }
+    private void Awake() => Instance = this;
 
     private void Start()
     {
-        GameManager.currentlevelInfo = FileUtils.GetCurrentLevelInfo();
         Camera.main.backgroundColor = GameManager.currentlevelInfo.cameraSolidColor;
         roadMat.color = GameManager.currentlevelInfo.roadColor;
     }

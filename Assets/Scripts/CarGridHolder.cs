@@ -10,10 +10,7 @@ public class CarGridHolder : MonoBehaviour
     public bool deadEnd;
     public bool canBlockRoad;
 
-    private void Awake()
-    {
-        _carGrids = GetComponentsInChildren<CarGrid>();
-    }
+    private void Awake() => _carGrids = GetComponentsInChildren<CarGrid>();
 
     public Tuple<CarGrid, bool> GetAvailableGrid()
     {

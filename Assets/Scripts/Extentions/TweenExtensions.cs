@@ -8,7 +8,7 @@ public static class TweenExtensions
     public static Sequence DoMoveRotate(this Transform t, Transform to, float duration, bool local = false, Ease ease = Ease.InOutQuad)
     {
         Vector3 toPos = local ? to.localPosition : to.position;
-        Vector3 toRotation = local ? to.localRotation.FixReturnEuler() : to.rotation.FixReturnEuler();
+        Vector3 toRotation = local ? to.localRotation.ClampEuler() : to.rotation.ClampEuler();
 
         Sequence seq = DOTween.Sequence();
         seq.SetTarget(t);

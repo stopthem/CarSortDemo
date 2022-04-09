@@ -41,19 +41,19 @@ public class LerpManager : Singleton<LerpManager>
         action.Invoke();
     }
 
-    public static void LoopWait<T>(T[] array, float timeBetweenElements, System.Action<T> elementAction, System.Action finishedAction = null)
+    public static void LoopWait<T>(T[] array, float timeBetweenElements, System.Action<T> elementAction, System.Action<T> lastElementAction = null)
     {
-        Instance.StartCoroutine(LoopWaitRoutine(array, timeBetweenElements, elementAction, finishedAction));
+        Instance.StartCoroutine(LoopWaitRoutine(array, timeBetweenElements, elementAction, lastElementAction));
     }
 
-    public static IEnumerator LoopWaitRoutine<T>(T[] array, float timeBetweenElements, System.Action<T> elementAction, System.Action finishedAction = null)
+    public static IEnumerator LoopWaitRoutine<T>(T[] array, float timeBetweenElements, System.Action<T> elementAction, System.Action<T> lastElementAction)
     {
         for (int i = 0; i < array.Length; i++)
         {
             elementAction.Invoke(array[i]);
             yield return new WaitForSeconds(timeBetweenElements);
+            if (i == array.Length - 1) lastElementAction?.Invoke(array[i]);
         }
-        finishedAction?.Invoke();
     }
 
     public static AnimationCurve PresetToAnimationCurve(PresetAnimationCurves curve) => Instance.animationCurves[(int)curve];

@@ -9,22 +9,18 @@ public class GateButton : MonoBehaviour
     private int _teamIndex;
     private float _coolDown;
     private MeshRenderer _pressableMesh;
+
     [SerializeField] private Ease pressedEase;
     [SerializeField] private Transform pressableButton;
     [SerializeField] private Transform buttonGoTo;
+
     private bool _canPress = true;
     private Vector3 _pressableStartLocal;
     private TeamCarsHolder _teamCarsHolder;
 
-    private void Awake()
-    {
-        _pressableMesh = pressableButton.GetComponent<MeshRenderer>();
-    }
+    private void Awake() => _pressableMesh = pressableButton.GetComponent<MeshRenderer>();
 
-    private void Start()
-    {
-        _pressableStartLocal = pressableButton.localPosition;
-    }
+    private void Start() => _pressableStartLocal = pressableButton.localPosition;
 
     public void Init(int teamIndex, float coolDown, Color teamColor, TeamCarsHolder teamCarsHolder)
     {

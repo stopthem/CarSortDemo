@@ -38,4 +38,13 @@ public class Car : MonoBehaviour
             _currentGrid.Placed(this, teamIndex);
         });
     }
+
+    public void PlayScaleTween(out float duration)
+    {
+        var tween = transform.DOScale(transform.localScale * carVariables.scaleMultiplier, carVariables.scaleTweenDuration / 2)
+        .SetLoops(2, LoopType.Yoyo)
+        .SetEase(carVariables.scaleEase);
+
+        duration = tween.Duration();
+    }
 }

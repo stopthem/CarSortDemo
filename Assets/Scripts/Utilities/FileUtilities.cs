@@ -4,7 +4,7 @@ using UnityEngine;
 
 public static class FileUtilities
 {
-    // public static LevelInfo GetCurrentLevelInfo() => Resources.Load<LevelInfo>("Levels/" + Mathf.Clamp(PlayerPrefs.GetInt("next_levelSc", 1), 1, 20));
+    public static LevelInfo GetCurrentLevelInfo() => Resources.Load<LevelInfo>("Levels/" + Mathf.Clamp(PlayerPrefs.GetInt("next_levelSc", 1), 1, PlayerPrefs.GetInt("max_level")));
 
-    // public static LevelInfo GetLevelInfo(int levelNum) => Resources.Load<LevelInfo>("Levels/" + levelNum);
+    public static LevelInfo GetLevelInfo(int levelNum) => Resources.Load<LevelInfo>("Levels/" + levelNum);
 }

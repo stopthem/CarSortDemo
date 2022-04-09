@@ -27,7 +27,7 @@ public class SphereLikeMover : MonoBehaviour
 
             var toRot = Quaternion.Euler(Mathf.Lerp(xRotRange.x, xRotRange.y, item1),
              Mathf.Lerp(yRotRange.x, yRotRange.y, item2), 0);
-            toRot.eulerAngles = toRot.FixReturnEuler();
+            toRot.eulerAngles = toRot.ClampEuler();
             transform.localRotation = toRot;
         }
     }
@@ -39,8 +39,8 @@ public class SphereLikeMover : MonoBehaviour
     private void Start()
     {
         canMove = false;
-        RotateNormalized = _startRotateNormalized = Tuple.Create(Mathf.InverseLerp(xRotRange.x, xRotRange.y, transform.localRotation.FixReturnEuler().x)
-        , Mathf.InverseLerp(yRotRange.x, yRotRange.y, transform.localRotation.FixReturnEuler().y));
+        RotateNormalized = _startRotateNormalized = Tuple.Create(Mathf.InverseLerp(xRotRange.x, xRotRange.y, transform.localRotation.ClampEuler().x)
+        , Mathf.InverseLerp(yRotRange.x, yRotRange.y, transform.localRotation.ClampEuler().y));
     }
 
     private void Update()

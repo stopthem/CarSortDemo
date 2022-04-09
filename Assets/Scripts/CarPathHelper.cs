@@ -13,17 +13,17 @@ public class CarPathHelper : MonoBehaviour
 
     private PathCreator _pathCreator;
 
-    public CarGridHolder[] _carGridHolders { get; private set; }
+    public CarGridHolder[] carGridHolders { get; private set; }
 
     private void Awake()
     {
         Instance = this;
-        _carGridHolders = GetComponentsInChildren<CarGridHolder>();
+        carGridHolders = GetComponentsInChildren<CarGridHolder>();
         _pathCreator = GetComponent<PathCreator>();
     }
 
     public List<CarGridHolder> GetMovableGridHoldersOrdered(Vector3 from)
-     => _carGridHolders.Where(x => x.GetAvailableGrid().Item1)
+     => carGridHolders.Where(x => x.GetAvailableGrid().Item1)
         .OrderBy(y => Mathf.Abs(y.transform.position.x - from.x))
         .ThenBy(x => Vector3.Distance(from, x.transform.position)).Reverse().ToList();
 
@@ -67,7 +67,6 @@ public class CarPathHelper : MonoBehaviour
                 grid = tuple.Item1;
                 AddSegmentToPath(from, grid, prevGridPos);
             }
-
         }
         return Tuple.Create(grid, _pathCreator.bezierPath);
     }

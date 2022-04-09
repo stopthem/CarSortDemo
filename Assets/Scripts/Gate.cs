@@ -10,10 +10,7 @@ public class Gate : MonoBehaviour
     [SerializeField] private Ease openCloseEase = Ease.InOutSine;
     private MeshRenderer _gateMesh;
 
-    private void Awake()
-    {
-        _gateMesh = GetComponent<MeshRenderer>();
-    }
+    private void Awake() => _gateMesh = GetComponent<MeshRenderer>();
 
     public void SetColors(Color color)
     {

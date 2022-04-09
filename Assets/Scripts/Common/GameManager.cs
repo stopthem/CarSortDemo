@@ -20,7 +20,7 @@ public class GameManager : Singleton<GameManager>
     {
         QualitySettings.vSyncCount = 0;
         Application.targetFrameRate = 60;
-        currentlevelInfo = FileUtils.GetCurrentLevelInfo();
+        currentlevelInfo = FileUtilities.GetCurrentLevelInfo();
     }
 
     private void Start()
@@ -30,6 +30,7 @@ public class GameManager : Singleton<GameManager>
 
     public static void Fail(float delay = 0)
     {
+        if (gameStatus == GameStatus.FAIL) return;
         DOVirtual.DelayedCall(delay, () =>
          {
              OnGameFailed?.Invoke();
@@ -40,6 +41,7 @@ public class GameManager : Singleton<GameManager>
 
     public static void Success(float delay = 0)
     {
+        if (gameStatus == GameStatus.SUCCESS) return;
         DOVirtual.DelayedCall(delay, () =>
         {
             // int nextLevelSc = PlayerPrefs.GetInt("next_levelSc", 1);
