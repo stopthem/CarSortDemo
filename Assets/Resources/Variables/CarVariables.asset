@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe507a6e422eea1479bff2c87cb106e2, type: 3}
   m_Name: CarVariables
   m_EditorClassIdentifier: 
-  moveDuration: 2
+  moveDuration: 1.25
   moveEase: 4

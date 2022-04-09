@@ -36,7 +36,7 @@ public class GateButton : MonoBehaviour
 
     private void OnMouseDown()
     {
-        if (!_canPress) return;
+        if (!_canPress || GameManager.gameStatus != GameManager.GameStatus.PLAY) return;
         _teamCarsHolder.Open();
         _canPress = false;
         DOTween.Sequence()

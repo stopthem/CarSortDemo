@@ -16,7 +16,6 @@ public class TeamCarsHolder : MonoBehaviour
     [SerializeField] private float waitBeforeMovingCar;
     [SerializeField] private Transform firstCarSpawnPoint;
     [SerializeField] private float zDisBetweenCars;
-    [SerializeField] private float reOrderDuration;
     [SerializeField] private float reOrderTimeBetweenCars;
     [SerializeField] private Ease reOrderEase;
 
@@ -29,7 +28,6 @@ public class TeamCarsHolder : MonoBehaviour
     {
         _teamColor = GameManager.currentlevelInfo.teams[teamIndex].color;
         _carCount = GameManager.currentlevelInfo.teams[teamIndex].carCount;
-        _prioCarGridHolders = CarPathHelper.Instance.GetPriotarizedGridHolders(transform.position);
 
         gateButton.Init(teamIndex, coolDown, _teamColor, this);
         gate.SetColors(_teamColor);
@@ -54,18 +52,36 @@ public class TeamCarsHolder : MonoBehaviour
 
     public void Open()
     {
+        if (_cars.Count == 0) return;
+
         gate.Open(coolDown);
+
         DOVirtual.DelayedCall(waitBeforeMovingCar, () =>
         {
+            Tuple<VertexPath, CarGrid> tuple = GetNextPath(_cars.Peek().transform.position, -1);
+            if (tuple.Item1 == null) return;
             Car car = _cars.Pop();
-            car.FollowPath(GetNextPath(car.transform.position, -1));
+            car.FollowPath(tuple);
+
+            ReOrderCars();
         });
     }
 
     public Tuple<VertexPath, CarGrid> GetNextPath(Vector3 position, int i)
     {
-        Tuple<VertexPath, CarGrid> tuple = CarPathHelper.Instance.GetPath(position, _prioCarGridHolders[i + 1]);
+        Tuple<VertexPath, CarGrid> tuple = CarPathHelper.Instance.GetPath(position, _prioCarGridHolders.ToArray());
         if (i + 1 == _prioCarGridHolders.Count - 1) return null;
+        if (tuple.Item1 == null)
+        {
+            _prioCarGridHolders = CarPathHelper.Instance.GetMovableGridHoldersOrdered(transform.position);
+            tuple = CarPathHelper.Instance.GetPath(position, _prioCarGridHolders.ToArray());
+        }
         return tuple;
+    }
+
+    private void ReOrderCars()
+    {
+        LerpManager.LoopWait(_cars.ToArray(), reOrderTimeBetweenCars,
+        x => x.transform.DOMove(x.transform.position.WithZ(x.transform.position.z + zDisBetweenCars), coolDown).SetEase(reOrderEase));
     }
 }

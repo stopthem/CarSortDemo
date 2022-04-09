@@ -42,15 +42,15 @@ public class GameManager : Singleton<GameManager>
     {
         DOVirtual.DelayedCall(delay, () =>
         {
-            int nextLevelSc = PlayerPrefs.GetInt("next_levelSc", 1);
+            // int nextLevelSc = PlayerPrefs.GetInt("next_levelSc", 1);
 
-            int nextLevelScFoo = nextLevelSc + 1;
+            // int nextLevelScFoo = nextLevelSc + 1;
 
-            if (nextLevelSc == 20) nextLevelScFoo = 1;
+            // if (nextLevelSc == 20) nextLevelScFoo = 1;
 
-            PlayerPrefs.SetInt("next_levelSc", nextLevelScFoo);
+            // PlayerPrefs.SetInt("next_levelSc", nextLevelScFoo);
 
-            PlayerPrefs.SetInt("next_level", PlayerPrefs.GetInt("next_level", 1) + 1);
+            // PlayerPrefs.SetInt("next_level", PlayerPrefs.GetInt("next_level", 1) + 1);
 
             OnGameSuccess?.Invoke();
             OnGameEnded?.Invoke();

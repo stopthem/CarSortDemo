@@ -14,7 +14,6 @@ public class Car : MonoBehaviour
     public int teamIndex { get; private set; }
 
     private CarGrid _currentGrid;
-    private int _gridHolderCount = -1;
 
     public void Init(Color color, int teamIndex, TeamCarsHolder teamCarsHolder)
     {
@@ -26,21 +25,17 @@ public class Car : MonoBehaviour
     public void FollowPath(Tuple<VertexPath, CarGrid> tuple)
     {
         if (tuple.Item1 == null || tuple.Item2 == null) return;
+        float moveDuration = carVariables.baseMoveDuration * (500 / (500 - tuple.Item1.length));
         DOTween.Sequence()
-       .Append(DOTween.To(x =>
-       {
-           transform.position = tuple.Item1.GetPointAtTime(x);
-           transform.rotation = tuple.Item1.GetRotation(x);
-       }, 0, .99f, carVariables.moveDuration))
-       .AppendCallback(() =>
-       {
-           _currentGrid = tuple.Item2;
-           _gridHolderCount++;
-
-           Tuple<VertexPath, CarGrid> toTuple = _teamCarsHolder.GetNextPath(transform.position, _gridHolderCount);
-
-           if ((toTuple != null && toTuple.Item2 != null) && !_currentGrid.MyGridHolder.deadEnd) FollowPath(toTuple);
-           else _currentGrid.Placed(teamIndex);
-       });
+        .Append(DOTween.To(x =>
+        {
+            transform.position = tuple.Item1.GetPointAtTime(x);
+            transform.rotation = tuple.Item1.GetRotation(x);
+        }, 0, .99f, moveDuration).SetEase(carVariables.moveEase))
+        .AppendCallback(() =>
+        {
+            _currentGrid = tuple.Item2;
+            _currentGrid.Placed(this, teamIndex);
+        });
     }
 }

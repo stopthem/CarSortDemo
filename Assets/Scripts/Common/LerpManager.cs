@@ -41,7 +41,12 @@ public class LerpManager : Singleton<LerpManager>
         action.Invoke();
     }
 
-    public static IEnumerator LoopWait<T>(T[] array, float timeBetweenElements, System.Action<T> elementAction, System.Action finishedAction = null)
+    public static void LoopWait<T>(T[] array, float timeBetweenElements, System.Action<T> elementAction, System.Action finishedAction = null)
+    {
+        Instance.StartCoroutine(LoopWaitRoutine(array, timeBetweenElements, elementAction, finishedAction));
+    }
+
+    public static IEnumerator LoopWaitRoutine<T>(T[] array, float timeBetweenElements, System.Action<T> elementAction, System.Action finishedAction = null)
     {
         for (int i = 0; i < array.Length; i++)
         {
