@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public static class UIExtensions
+namespace CanTemplate.Extensions
 {
-    public static void UpdateLayout(this LayoutGroup layoutGroup)
+    public static class UIExtensions
     {
-        Canvas.ForceUpdateCanvases();
-        layoutGroup.enabled = false;
-        layoutGroup.enabled = true;
+        public static void UpdateLayout(this LayoutGroup layoutGroup)
+        {
+            Canvas.ForceUpdateCanvases();
+            layoutGroup.enabled = false;
+            layoutGroup.enabled = true;
+        }
     }
 }

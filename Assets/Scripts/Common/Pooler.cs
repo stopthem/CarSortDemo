@@ -68,7 +68,10 @@ public class Pooler : MonoBehaviour
 
     public void ClearObject(Poolable poolable)
     {
-        poolable.transform.parent = transform;
+        if (poolable.GetComponent<RectTransform>())
+            poolable.transform.SetParent(transform);
+        else
+            poolable.transform.parent = transform;
 
         poolable.transform.localScale = objectToPool.transform.localScale;
         poolable.transform.rotation = objectToPool.transform.rotation;

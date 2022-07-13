@@ -23,10 +23,10 @@ public class LevelConditionsChecker : MonoBehaviour
         {
             float tweensDuration = 0;
             LerpManager.LoopWait<Car>(CarPathHelper.Instance.carGridHolders
-            .SelectMany(x => x._carGrids.Select(y => y.MyCar))
-            .OrderByDescending(x => x.transform.position.z)
-            .ToArray(),
-            scaleTweenTimeBetweenCars, x => x.PlayScaleTween(out tweensDuration));
+                    .SelectMany(x => x._carGrids.Select(y => y.MyCar))
+                    .OrderByDescending(x => x.transform.position.z)
+                    .ToArray(),
+                scaleTweenTimeBetweenCars, (Car x, int i) => x.PlayScaleTween(out tweensDuration));
             DOVirtual.DelayedCall(tweensDuration + (scaleTweenTimeBetweenCars * _carGridCount), () => GameManager.Success());
         }
     }

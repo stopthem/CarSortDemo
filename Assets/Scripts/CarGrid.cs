@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using CanTemplate.Extensions;
 using DG.Tweening;
 using UnityEngine;
 
@@ -20,7 +21,7 @@ public class CarGrid : MonoBehaviour
         canvas.localRotation = Quaternion.LookRotation(canvas.localPosition.GetDirection(lookAt));
         canvas.localScale = Vector3.zero;
 
-        spriteRenderer.color = GameManager.currentlevelInfo.teams[teamIndex].color;
+        spriteRenderer.color = GameManager.currentLevelInfo.teams[teamIndex].color;
         MyGridHolder = GetComponentInParent<CarGridHolder>();
     }
 

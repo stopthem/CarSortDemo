@@ -12,9 +12,9 @@ public class LevelColorsHandler : MonoBehaviour
 
     private void Start()
     {
-        Camera.main.backgroundColor = GameManager.currentlevelInfo.cameraSolidColor;
-        roadMat.color = GameManager.currentlevelInfo.roadColor;
+        Camera.main.backgroundColor = GameManager.currentLevelInfo.cameraSolidColor;
+        roadMat.color = GameManager.currentLevelInfo.roadColor;
     }
 
-    public Color GetTeamColor(int teamIndex) => GameManager.currentlevelInfo.teams[teamIndex].color;
+    public Color GetTeamColor(int teamIndex) => GameManager.currentLevelInfo.teams[teamIndex].color;
 }

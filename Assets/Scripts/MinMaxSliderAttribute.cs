@@ -8,6 +8,7 @@ public class MinMaxSliderAttribute : PropertyAttribute
 {
     public float Min { get; set; }
     public float Max { get; set; }
+    public readonly float FloatFieldWidthMultiplier;
     public bool DataFields { get; set; } = true;
     public bool FlexibleFields { get; set; } = true;
     public bool Bound { get; set; } = true;
@@ -17,9 +18,10 @@ public class MinMaxSliderAttribute : PropertyAttribute
     {
     }
 
-    public MinMaxSliderAttribute(float min, float max)
+    public MinMaxSliderAttribute(float min, float max, float fieldWidthMultiplier = 1.75f)
     {
         Min = min;
         Max = max;
+        FloatFieldWidthMultiplier = fieldWidthMultiplier;
     }
 }

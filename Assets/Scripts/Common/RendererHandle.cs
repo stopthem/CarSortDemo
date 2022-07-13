@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using CanTemplate.Extensions;
 using UnityEngine;
 
 public class RendererHandle : MonoBehaviour
